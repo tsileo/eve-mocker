@@ -2,7 +2,7 @@
  Eve-Mocker
 ============
 
-Mocking tool for `Eve powered REST API <http://python-eve.org>`_ (based on the excellent `HTTPretty <http://falcao.it/HTTPretty/>`_) aimed to be used in your unit tests, when you rely on an Eve API.
+Mocking tool for `Eve powered REST API <http://python-eve.org>`_, based on the excellent `HTTPretty <http://falcao.it/HTTPretty>`_, aimed to be used in your unit tests, when you rely on an Eve API.
 
 Features
 ========
@@ -12,7 +12,7 @@ Eve-Mocker doesn't try to replicate every Eve features, by design, it doesn't ne
 * Everything is stored in memory (``self.items``)
 * Support all methods except HEAD requests
 * Handle ETags, and always return meaningful status code, like Eve.
-* No need to change your code for testing, HTTPretty does everything for you, it works well with `requests <www.python-requests.org>`_.
+* No need to change your code for testing, HTTPretty does everything for you, it works well with `requests <http://www.python-requests.org>`_.
 
 
 Installing
@@ -28,7 +28,7 @@ Installing
 Usage
 =====
 
-You should read `HTTPretty <http://falcao.it/HTTPretty/>`_ documentation before starting.
+You should read `HTTPretty <http://falcao.it/HTTPretty>`_ documentation before starting.
 
 Here is a basic example:
 
