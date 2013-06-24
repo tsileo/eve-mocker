@@ -1,0 +1,11 @@
+*.pyc
+*wip.py
+build/
+dist/
+*.egg-info/
+.sass-cache
+.DS_Store
+*tar.gz
+*.zip
+.pypirc
+docs/_build
