@@ -40,7 +40,7 @@ Here is a basic example:
     HTTPretty.enable()
     EveMocker("http://myapi.com/api/")
     
-    response = requests.get("http://myapi.com/api/mymodel")
+    response = requests.get("http://myapi.com/api/mymodel/")
     assert response.status_code == 200
     assert response.json() == {"_items": []}
 
@@ -55,7 +55,7 @@ Alternatively, you use ``EveMocker`` within a context manager, and it will autom
     import requests
 
     with EveMocker("http://myapi.com/api/"):
-        response = requests.get("http://myapi.com/api/mymodel")
+        response = requests.get("http://myapi.com/api/mymodel/")
         assert response.status_code == 200
         assert response.json() == {"_items": []}
 
