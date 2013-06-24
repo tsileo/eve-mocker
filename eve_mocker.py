@@ -47,7 +47,8 @@ class EveMocker(object):
         self.etag = {}
 
         # Register all URIs for resources
-        resource_regex = re.compile(urljoin(self.base_url, "/([a-zA-Z0-9-_]+)/"))
+        resource_url = urljoin(self.base_url, "([^/]+/?$)")
+        resource_regex = re.compile(resource_url)
 
         HTTPretty.register_uri(HTTPretty.GET,
                                resource_regex,
@@ -61,7 +62,7 @@ class EveMocker(object):
                                body=self.generate_resource_response)
 
         # Register URIs for items
-        item_regex = re.compile(urljoin(self.base_url, "/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/"))
+        item_regex = re.compile(urljoin(self.base_url, "([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)"))
 
         HTTPretty.register_uri(HTTPretty.GET,
                                item_regex,
@@ -126,7 +127,6 @@ class EveMocker(object):
         headers["content_type"] = "application/json"
         resource, item_id = filter(lambda x: x not in ["api", ""],
                                    request.path.split('/'))
-
         if item_id not in self.items[resource]:
             status_code = 405
             if request.method == "GET":

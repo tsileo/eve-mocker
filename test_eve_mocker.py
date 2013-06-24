@@ -59,10 +59,11 @@ class TestEveMocker(unittest.TestCase):
         expect(response.json()).to.equal({"_items": [mymodel1_test]})
 
         # Check if we can retrieve the item via its URI
-        response = requests.get(api_url("mymodel/mypk1"))
+        response = requests.get(api_url("mymodel/mypk1/"))
         data = response.json()
 
         expect(response.status_code).to.equal(200)
+
         expect(data).to.equal(mymodel1_test)
 
         # Check that we CAN'T rePOST mymodel1 with the same primary key
@@ -104,7 +105,7 @@ class TestEveMocker(unittest.TestCase):
                               "content": "new content"})
 
         # Check if the item has been updated
-        response = requests.get(api_url("mymodel/mypk1"))
+        response = requests.get(api_url("mymodel/mypk1/"))
         data = response.json()
 
         expect(response.status_code).to.equal(200)
