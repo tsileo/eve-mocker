@@ -18,7 +18,7 @@ api_url = partial(urljoin, BASE_URL)
 class TestEveMocker(unittest.TestCase):
     def setUp(self):
         HTTPretty.enable()
-        EveMocker(BASE_URL, default_pk="testpk")
+        self.eve_mocker = EveMocker(BASE_URL, default_pk="testpk")
 
     def tearDown(self):
         HTTPretty.disable()
@@ -135,6 +135,30 @@ class TestEveMocker(unittest.TestCase):
         expect(response.status_code).to.equal(200)
         expect(data).to.have.key("_items")
         expect(data["_items"]).to.be.empty
+
+    def testSetResource(self):
+        """ Test that EveMocker.set_resource works. """
+        test_items = sorted([{"testpk": "pk1", "content": "content1"},
+                             {"testpk": "pk2", "content": "content2"}])
+
+        self.eve_mocker.set_resource("testresource", test_items)
+
+        # Check that we retireve the items on a GET call
+        response = requests.get(api_url("testresource/"))
+        data = response.json()
+
+        expect(response.status_code).to.equal(200)
+        expect(data).to.have.key("_items")
+        expect(sorted(data["_items"])).to.equal(test_items)
+
+    def testSetResourceNoPk(self):
+        """ Set a resource item without PK should raise an Exception. """
+        # No pk for the item should raise an Exception
+        falsy_items = [{"content": "content1"}]
+        set_resource = self.eve_mocker.set_resource
+
+        expect(set_resource).when.called_with("testresource",
+                                              falsy_items).should.throw(Exception)
 
     def testContextManager(self):
         """ Test EveMocker within a context manager. """

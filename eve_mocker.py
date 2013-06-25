@@ -87,8 +87,34 @@ class EveMocker(object):
         return self.pk_maps.get(resource, self.default_pk)
 
     def get_resource(self, resource):
-        """ Retrieve all items for a resource from self.items """
+        """ Retrieve all items for a resource.
+
+        Resources are stored in a dict of list (self.items).
+
+        :type resource: str
+        :param resource: Resource name
+
+        """
         return [item for key, item in self.items[resource].items()]
+
+    def set_resource(self, resource, items=[]):
+        """ Set items for a given resource.
+
+        :type resource: str
+        :param resource: Resource name
+
+        :type items: list
+        :param items: List of items (dict),
+            also don't forget the pk for each items.
+
+        """
+        pk = self.get_pk(resource)
+        for item in items:
+            if pk in item:
+                self.items[resource][item[pk]] = item
+            else:
+                exc = "No primary key: {0} found for item: {1}".format(pk, item)
+                raise Exception(exc)
 
     def generate_resource_response(self, request, uri, headers):
         """ Generate a response for a resource,
