@@ -6,7 +6,7 @@ import unittest
 import requests
 from httpretty import HTTPretty
 from sure import expect
-from eve_mocker import EveMocker
+from eve_mocker import EveMocker, query_data
 from urlparse import urljoin
 from functools import partial
 import json
@@ -24,7 +24,7 @@ class TestEveMocker(unittest.TestCase):
         HTTPretty.disable()
 
     def testAPI(self):
-        """ Test """
+        """ Testing all client features. """
         mymodel_url = api_url("mymodel")
         mymodel1 = {"testpk": "mypk1", "content": "test content"}
 
@@ -159,6 +159,17 @@ class TestEveMocker(unittest.TestCase):
 
         expect(set_resource).when.called_with("testresource",
                                               falsy_items).should.throw(Exception)
+
+    def testQueryData(self):
+        """ Test if mongo query syntax works, testing the raw query_data """
+        test_data = [{"testpk": i} for i in range(50)]
+        res = query_data(test_data, {"testpk": 10})
+
+        expect(res).to.have.length_of(1)
+        expect(res[0]).to.equal(test_data[10])
+
+        res = query_data(test_data, {"testpk": {"$gte": 10}})
+        expect(res).to.have.length_of(40)
 
     def testContextManager(self):
         """ Test EveMocker within a context manager. """

@@ -6,6 +6,7 @@ from urlparse import parse_qs, urljoin
 from collections import defaultdict
 import time
 import hashlib
+from itertools import ifilter
 
 PK = "_id"
 
@@ -13,6 +14,56 @@ PK = "_id"
 def generate_etag():
     """ Helper function for generating random etag. """
     return hashlib.sha1(str(time.time())).hexdigest()
+
+
+def query_data(data, q):
+    """ Filter data for a given MongoDB query.
+
+    Only a subset of MongoDB query language is supported:
+
+    - $gt
+    - $gte
+    - $lt
+    - $lte
+    - $ne
+    - $in
+    - $nin
+
+    You can combine multiple operator like {"val": {"$gt": 10, "$lt": 20}}
+
+    :type data: list
+    :param data: List of dict
+
+    :type q: dict
+    :param q: MongoDB Query
+
+    """
+    for k, f in q.items():
+        if isinstance(f, dict):
+            for _filter, val in f.items():
+                _f = lambda x: True
+                if _filter.startswith("$"):
+                    if _filter == "$gt":
+                        _f = lambda x: k in x and x[k] > val
+                    elif _filter == "$gte":
+                        _f = lambda x: k in x and x[k] >= val
+                    elif _filter == "$lt":
+                        _f = lambda x: k in x and x[k] < val
+                    elif _filter == "$lte":
+                        _f = lambda x: k in x and x[k] <= val
+                    elif _filter == "$ne":
+                        _f = lambda x: k in x and x[k] != val
+                    elif _filter == "$in":
+                        _f = lambda x: k in x and x[k] in val
+                    elif _filter == "$nin":
+                        _f = lambda x: k in x and not x[k] in val
+                else:
+                    _f = lambda x: k in x and x[k] == f
+                data = list(ifilter(_f, data))
+        else:
+            _f = lambda x: k in x and x[k] == f
+            data = list(ifilter(_f, data))
+    return data
 
 
 class EveMocker(object):
