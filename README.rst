@@ -88,20 +88,23 @@ Let's say you want to test the following class stored in ``remote_items.py`` tha
 
 .. code-block:: python
 
+    from urlparse import urljoin
     from functools import partial
     import requests
 
     API_URL = "http://my-eve-api.com/api/"
 
+
     class RemoteItems(object):
         def __init__(self, api_url=API_URL):
             self.api_url = api_url
-            self.endpoint_url = partial("{0}/{1}/".format, self.api_url)
+            self.endpoint_url = partial(urljoin, self.api_url)
 
         def get_latest(self):
             r = requests.get(self.endpoint_url("items"))
             r.raise_for_status()
             return r.json().get("_items", [])
+
 
 Here is how you can do it with Eve-Mocker:
 
@@ -127,6 +130,7 @@ Here is how you can do it with Eve-Mocker:
 
     if __name__ == '__main__':
         unittest.main()
+
 
 You can find these two files in the **examples** directory.
 
