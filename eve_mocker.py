@@ -173,11 +173,20 @@ class EveMocker(object):
         headers["content_type"] = "application/json"
         path = filter(lambda x: x not in ["api", ""], request.path.split('/'))
         resource = path[0]
-
         if request.method == "GET":
+            _items = self.get_resource(resource)
+
+            # Check if a querystring is provided
+            if request.querystring and "where" in request.querystring:
+                try:
+                    # Load the mongo query and filter the result
+                    q = json.loads(request.querystring["where"][0])
+                    _items = query_data(_items, q)
+                except:
+                    pass
             return [200,
                     headers,
-                    json.dumps({"_items": self.get_resource(resource)})]
+                    json.dumps({"_items": _items})]
 
         elif request.method == "POST":
             qs = parse_qs(request.body)

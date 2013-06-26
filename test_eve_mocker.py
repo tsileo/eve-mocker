@@ -151,6 +151,35 @@ class TestEveMocker(unittest.TestCase):
         expect(data).to.have.key("_items")
         expect(sorted(data["_items"])).to.equal(test_items)
 
+    def testFiltering(self):
+        """ Test ?where query with basic filtering. """
+        test_items = sorted([{"testpk": "pk1", "content": "content1"},
+                             {"testpk": "pk2", "content": "content2"}])
+
+        self.eve_mocker.set_resource("testresource", test_items)
+
+        # Check that we retireve the items on a GET call
+        response = requests.get(api_url('testresource/?where={"content": "content1"}'))
+        data = response.json()
+
+        expect(response.status_code).to.equal(200)
+        expect(data).to.have.key("_items")
+        expect(sorted(data["_items"])).to.equal([{"testpk": "pk1", "content": "content1"}])
+
+    def testFilteringMongoQuery(self):
+        """ Test ?where query with with mongo query syntax filtering. """
+        test_items = [{"testpk": i} for i in range(50)]
+
+        self.eve_mocker.set_resource("testresource", test_items)
+
+        # Check that we retireve the items on a GET call
+        response = requests.get(api_url('testresource/?where={"testpk": {"$gte": 10}}'))
+        data = response.json()
+
+        expect(response.status_code).to.equal(200)
+        expect(data).to.have.key("_items")
+        expect(sorted(data["_items"])).to.have.length_of(40)
+
     def testSetResourceNoPk(self):
         """ Set a resource item without PK should raise an Exception. """
         # No pk for the item should raise an Exception
