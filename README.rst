@@ -12,6 +12,7 @@ Eve-Mocker doesn't try to replicate every Eve features, by design, it doesn't ne
 * Everything is stored in memory (``self.items``)
 * Support all methods except HEAD requests
 * Handle ETags, and always return meaningful status code, like Eve.
+* Partial support of filtering (only mongo query syntax)
 * No need to change your code for testing, HTTPretty does everything for you, it works well with `requests <http://www.python-requests.org>`_.
 
 

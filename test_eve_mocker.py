@@ -171,6 +171,27 @@ class TestEveMocker(unittest.TestCase):
         res = query_data(test_data, {"testpk": {"$gte": 10}})
         expect(res).to.have.length_of(40)
 
+        res = query_data(test_data, {"testpk": {"$gte": 10, "$lte": 15}})
+        expect(res).to.have.length_of(6)
+
+        res = query_data(test_data, {"badkey": {"$gte": 10, "$lte": 15}})
+        expect(res).to.have.length_of(0)
+
+        res = query_data(test_data, {"testpk": {"$in": [1, 2, 3, 4, 5]}})
+        expect(res).to.have.length_of(5)
+
+        res = query_data(test_data, {"testpk": {"$nin": [1, 2, 3, 4, 5]}})
+        expect(res).to.have.length_of(45)
+
+        res = query_data(test_data, {"testpk": {"$ne": 10}})
+        expect(res).to.have.length_of(49)
+
+        res = query_data(test_data, {"testpk": {"$gt": 10}})
+        expect(res).to.have.length_of(39)
+
+        res = query_data(test_data, {"testpk": {"$lt": 10}})
+        expect(res).to.have.length_of(10)
+
     def testContextManager(self):
         """ Test EveMocker within a context manager. """
         with EveMocker("http://myapi.com/api/"):
