@@ -180,6 +180,42 @@ class TestEveMocker(unittest.TestCase):
         expect(data).to.have.key("_items")
         expect(sorted(data["_items"])).to.have.length_of(40)
 
+    def testSort(self):
+        """ Test ?sort query with with mongo syntax. """
+        test_items = [{"testpk": i} for i in range(50)]
+
+        self.eve_mocker.set_resource("testresource", test_items)
+
+        # Check that we retireve the items on a GET call
+        response = requests.get(api_url('testresource/?sort={"testpk": 1}'))
+        data = response.json()
+
+        expect(response.status_code).to.equal(200)
+        expect(data).to.have.key("_items")
+        expect(data["_items"][0]).to.equal({"testpk": 0})
+
+    def testSortDesc(self):
+        test_items = [{"testpk": i} for i in range(50)]
+
+        self.eve_mocker.set_resource("testresource", test_items)
+
+        response = requests.get(api_url('testresource/?sort={"testpk": -1}'))
+        data = response.json()
+        expect(response.status_code).to.equal(200)
+        expect(data).to.have.key("_items")
+        expect(data["_items"][0]).to.equal({"testpk": 49})
+
+    def testSortDescWithWhere(self):
+        test_items = [{"testpk": i} for i in range(50)]
+
+        self.eve_mocker.set_resource("testresource", test_items)
+
+        response = requests.get(api_url('testresource/?sort={"testpk": -1}&where={"testpk": {"$lte": 30}}'))
+        data = response.json()
+        expect(response.status_code).to.equal(200)
+        expect(data).to.have.key("_items")
+        expect(data["_items"][0]).to.equal({"testpk": 30})
+
     def testSetResourceNoPk(self):
         """ Set a resource item without PK should raise an Exception. """
         # No pk for the item should raise an Exception

@@ -12,7 +12,7 @@ Eve-Mocker doesn't try to replicate every Eve features, by design, it doesn't ne
 * Everything is stored in memory (``self.items``)
 * Support all methods except HEAD requests
 * Handle ETags, and always return meaningful status code, like Eve.
-* Partial support of filtering (only mongo query syntax)
+* Partial support of filtering and sorting (only mongo query syntax)
 * No need to change your code for testing, HTTPretty does everything for you, it works well with `requests <http://www.python-requests.org>`_.
 * It renders only JSON, no XML yet.
 
@@ -113,7 +113,6 @@ Here is how you can do it with Eve-Mocker:
     from eve_mocker import EveMocker
     import unittest
     from remote_items import RemoteItems, API_URL
-
 
     class TestRemoteItems(unittest.TestCase):
         def testGetLatestItems(self):

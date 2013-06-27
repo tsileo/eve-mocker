@@ -184,6 +184,19 @@ class EveMocker(object):
                     _items = query_data(_items, q)
                 except:
                     pass
+            if request.querystring and "sort" in request.querystring:
+                try:
+                    s = json.loads(request.querystring["sort"][0])
+                    for k, v in s.items():
+                        reverse = True
+                        if v == 1:
+                            reverse = False
+                        elif v == -1:
+                            reverse = True
+                        _items = sorted(_items, key=lambda x: x[k], reverse=reverse)
+                except:
+                    pass
+
             return [200,
                     headers,
                     json.dumps({"_items": _items})]
