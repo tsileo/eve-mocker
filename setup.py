@@ -14,17 +14,15 @@ setup(
     license="MIT",
     keywords="eve api mock mocking mocker",
     url="https://github.com/tsileo/eve-mocker",
-    py_modules=["eve_mocker"],
+    packages=["eve_mocker"],
     long_description=read("README.rst"),
     install_requires=["httpretty"],
     tests_require=["sure", "requests"],
     test_suite="test_eve_mocker",
-#    entry_points={'console_scripts': ["mycommand = dirtools:main"]},
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
     ],
-    scripts=["eve_mocker.py"],
 )

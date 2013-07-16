@@ -19,8 +19,6 @@ Eve-Mocker doesn't try to replicate every Eve features, by design, it doesn't ne
 Installing
 ==========
 
-(soon to be released on pypy.)
-
 .. code-block::
 
     $ pip install eve-mocker
