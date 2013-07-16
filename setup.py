@@ -14,7 +14,7 @@ setup(
     license="MIT",
     keywords="eve api mock mocking mocker",
     url="https://github.com/tsileo/eve-mocker",
-    packages=["eve_mocker"],
+    py_modules=["eve_mocker"],
     long_description=read("README.rst"),
     install_requires=["httpretty"],
     tests_require=["sure", "requests"],
@@ -25,4 +25,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
     ],
+    zip_safe=False,
 )
