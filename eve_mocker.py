@@ -170,7 +170,7 @@ class EveMocker(object):
     def generate_resource_response(self, request, uri, headers):
         """ Generate a response for a resource,
             support all methods, except HEAD. """
-        headers["content_type"] = "application/json"
+        headers["content-type"] = "application/json"
         path = filter(lambda x: x not in ["api", ""], request.path.split('/'))
         resource = path[0]
         if request.method == "GET":
@@ -223,7 +223,7 @@ class EveMocker(object):
     def generate_item_response(self, request, uri, headers):
         """ Generate a response for an item,
             support all methods, except HEAD. """
-        headers["content_type"] = "application/json"
+        headers["content-type"] = "application/json"
         resource, item_id = filter(lambda x: x not in ["api", ""],
                                    request.path.split('/'))
         if item_id not in self.items[resource]:
